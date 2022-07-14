@@ -1,0 +1,43 @@
+{% extends "base.html" %}
+{% block title %}Dashboard{% endblock %}
+{% block content %}
+{% if user.is_superuser %}
+<h1>Admin Dashboard</h1>
+{% else %}
+<h1>User Dashboard</h1>
+{% endif %}
+<p>Welcome to your dashboard.</p>
+{% if user.is_superuser %}
+<div id="notes" style = 'margin: 20px;background-color: #7fe7b3;padding: 20px;'>
+<p><b>This window is the admin dashboard, where admin can view the user activities like Project assigned to each user, date of project, time of project starting and ending.
+    <br>Each time the user can login and select the project from their dashboard and subit the start time and end time.</b>
+<br>Admin can login to admin panel through <b> <a href="http://127.0.0.1:8000/admin" style='color:#e73803;'>Visit Admin Console</a> </b> Admin Username : admin, Password: admin </p>
+<br> Admin can add new Projects in the projects section and Assign project to registered user.is_superuser</br>
+<br> New User can be registered through <b> <a href="http://127.0.0.1:8000/account/register" style='color:#e73803;'>Register New User</a> </b></br>
+<br> Registered Users can login through <b> <a href="http://127.0.0.1:8000/account/login" style='color:#e73803;'>Login Existing User</a> </b></br>
+</div>
+{% for proj in data %}
+<div class="comment" style="margin:20px;">
+    <p class="info" style="background-color:#6d4fda; color:rgb(241, 241, 241); padding: 20px; font-weight: bold; font-size: 20px;">
+        This project named<b> " {{ proj.name }} " </b>assigned to User named:<b> {{ proj.name.assigned }} </b>is created on 
+        {{ proj.name.created }} 
+        <br>
+        <h3 style="font-weight: bold;">Usage Timing </h3> 
+       
+    <div style="width:80%; background-color:rgb(243, 188, 116); padding:20px;">
+        Dated on  {{ proj.date }}
+        Start Time {{ proj.start_time }} Last Logout Activity is  on {{ proj.stop_time }}
+    </div>
+    
+</div>
+
+{% endfor %}
+
+{% else %} 
+<form method="post">
+    {% csrf_token %}
+    {{ Activity_form.as_p }}
+    <p><input type="submit" value="Submit"></p>
+</form>
+{% endif %}
+{% endblock %}
